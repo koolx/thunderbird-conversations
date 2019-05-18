@@ -1,0 +1,30 @@
+diff --git a/modules/message.js b/modules/message.js
+--- a/modules/message.js
++++ b/modules/message.js
+@@ -1250,8 +1250,25 @@
+           key: strings.get("header-folder"),
+           value: sanitize(folderName(this._msgHdr.folder)[1]),
+         });
++        if (aHeaders.has("date")) {
++          let value = sanitize(aHeaders.get("date"));
++          try {
++            value = new Date(value).toLocaleString('default', {
++              weekday: 'short',
++              year: 'numeric',
++              month: 'short',
++              day: 'numeric',
++              hour: 'numeric',
++              minute: '2-digit',
++              second: '2-digit',
++              timeZoneName: 'short'
++            });
++          }
++          catch(e) {}
++          data.extraLines.push({key:strings.get("header-date"), value});
++        }
+         let interestingHeaders =
+-          ["mailed-by", "x-mailer", "mailer", "date", "user-agent", "reply-to"];
++          ["mailed-by", "x-mailer", "mailer", "user-agent", "reply-to"];
+         for (let h of interestingHeaders) {
+           if (aHeaders.has(h)) {
+             let key = h;
